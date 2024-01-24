@@ -1,6 +1,7 @@
 const anant = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+require("dotenv").config();
 
 const app = anant();
 app.use(anant.json());
@@ -30,10 +31,12 @@ const Book = mongoose.model('Book', bookSchema);
 
 app.use(anant.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb+srv://nishantsinghworkshard:nishant@cluster0.5hpxdcq.mongodb.net/?retryWrites=true&w=majority')
-    .then(() => {
-        console.log("App connected to the database");
-        app.listen(5000);
+mongoose.connect(process.env.connectionString)
+    .then((e) => {
+        console.log("App connected to the database : ",e.connection.port);
+        app.listen(process.env.port , () => {
+            console.log("The server is listening at the port 5000");
+        });
     })
     .catch((err) => {
         console.log(err);
